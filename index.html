@@ -644,6 +644,7 @@
   // Mismo orden que en Code_linea_corta.gs (LINES)
   const lines = [
     "5491125447506",
+    "5491125448190",
     "5491125448420"
   ];
 
@@ -685,7 +686,7 @@
 
   // Al cargar la página: pedimos los contadores reales en segundo plano.
   // Esto NO bloquea nada, el usuario puede clickear antes de que responda
-  // (en ese caso arrancamos desde [0,0], que reparte igual de bien).
+  // (en ese caso arrancamos desde [0,0,0], que reparte igual de bien).
   fetch(`${APPS_SCRIPT_URL}?action=counts`)
     .then(res => res.json())
     .then(data => {
@@ -694,7 +695,7 @@
         countsReady = true;
       }
     })
-    .catch(() => { /* seguimos con [0,0] si falla */ });
+    .catch(() => { /* seguimos con [0,0,0] si falla */ });
 
   function pickLineIndex(){
     let minIndex = 0;
