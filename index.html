@@ -692,6 +692,14 @@
     "Hola, me pasás los datos para jugar en {plataforma}?"
   ];
 
+  // Registro de visita (una vez por sesión del navegador) para estadísticas
+  try {
+    if (!sessionStorage.getItem('visitLogged')) {
+      sessionStorage.setItem('visitLogged', '1');
+      fetch(`${APPS_SCRIPT_URL}?action=visit`).catch(() => {});
+    }
+  } catch (e) { fetch(`${APPS_SCRIPT_URL}?action=visit`).catch(() => {}); }
+
   function pickMessage(key){
     const template = messageTemplates[Math.floor(Math.random() * messageTemplates.length)];
     return template.replace('{plataforma}', platformNames[key]);
@@ -760,7 +768,7 @@
 
     // 4) Avisa al backend en segundo plano, sin esperar respuesta
     //    ni bloquear al usuario. Si falla, no pasa nada grave.
-    fetch(`${APPS_SCRIPT_URL}?action=increment&line=${idx}`).catch(() => {});
+    fetch(`${APPS_SCRIPT_URL}?action=increment&line=${idx}&btn=${encodeURIComponent(key)}`).catch(() => {});
   }
 
   document.getElementById('btn-ganamos').addEventListener('click', (e) => handleClick(e, 'ganamos'));
