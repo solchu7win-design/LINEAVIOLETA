@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Estadísticas · Línea Violeta</title>
+<style>
+:root{--bg:#07040f;--card:#120a22;--line:#2b1650;--txt:#f1eaff;--mut:#a897c9;--v:#9b2fe8;--vh:#c04dff;--f:#ff1fd0}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:16px;max-width:980px;margin:0 auto}
+h1{font-size:20px;margin:6px 0 2px}h2{font-size:15px;margin:0 0 12px;color:var(--vh)}
+.sub{color:var(--mut);font-size:13px;margin-bottom:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:14px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+input,select,button{background:#1a0f33;color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px}
+button{background:linear-gradient(135deg,var(--v),var(--f));border:0;font-weight:700;cursor:pointer}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.kpi{background:#1a0f33;border-radius:12px;padding:12px}.kpi b{display:block;font-size:24px}.kpi span{font-size:12px;color:var(--mut)}
+.bars{display:flex;align-items:flex-end;gap:3px;height:150px}
+.bar{flex:1;background:linear-gradient(to top,var(--v),var(--f));border-radius:4px 4px 0 0;min-height:2px;position:relative}
+.bar.top{box-shadow:0 0 12px var(--f)}
+.lbls{display:flex;gap:3px;font-size:10px;color:var(--mut);margin-top:4px}.lbls span{flex:1;text-align:center;min-width:0;overflow:hidden;white-space:nowrap}
+.hm{display:grid;grid-template-columns:34px repeat(24,1fr);gap:2px;font-size:10px}
+.hm div{aspect-ratio:1;border-radius:3px;display:flex;align-items:center;justify-content:center}
+.hm .h{color:var(--mut);aspect-ratio:auto}
+.scroll{overflow-x:auto}.scroll>div{min-width:560px}
+.list div{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--line);font-size:14px}
+.hint{font-size:12px;color:var(--mut);margin-top:8px}
+#err{color:#ff7aa8;font-size:13px;margin-top:8px}
+</style>
+</head>
+<body>
+<h1>📊 Estadísticas · Línea Violeta</h1>
+<div class="sub">Madafaker's Team · horario de Argentina</div>
+
+<div class="card" id="login">
+  <div class="row">
+    <input id="key" type="password" placeholder="Clave de estadísticas" autocomplete="off">
+    <button id="go">Ver estadísticas</button>
+  </div>
+  <div id="err"></div>
+</div>
+
+<div id="app" style="display:none">
+  <div class="card row">
+    <select id="type"><option value="clic">Clics</option><option value="visita">Visitas</option><option value="all">Clics + visitas</option></select>
+    <select id="range"><option value="7">Últimos 7 días</option><option value="30" selected>Últimos 30 días</option><option value="0">Todo el historial</option></select>
+    <button id="reload">Actualizar</button>
+  </div>
+  <div class="card"><div class="kpis" id="kpis"></div></div>
+  <div class="card"><h2>🎯 Mejores momentos para publicitar</h2><div class="list" id="best"></div></div>
+  <div class="card"><h2>Por franja horaria</h2><div class="bars" id="byHour"></div><div class="lbls" id="byHourL"></div></div>
+  <div class="card"><h2>Por día de la semana</h2><div class="bars" id="byDow"></div><div class="lbls" id="byDowL"></div></div>
+  <div class="card"><h2>Mapa de calor (día × hora)</h2><div class="scroll"><div class="hm" id="hm"></div></div><div class="hint">Más intenso = más movimiento.</div></div>
+  <div class="card"><h2>Por fecha</h2><div class="bars" id="byDate"></div><div class="lbls" id="byDateL"></div></div>
+  <div class="card"><h2>Por botón</h2><div class="list" id="byBtn"></div></div>
+  <div class="card"><h2>Por línea de WhatsApp</h2><div class="list" id="byLine"></div></div>
+</div>
+
+<script>
+const URL_ = "https://script.google.com/macros/s/AKfycbxUb3XZyno49RwyG9K3jgFZbJqDE6WFV-2H_VMw3wT-SlUDJYeyt1GmXS0w5sXD_F6rJw/exec";
+const DOW=['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+const $=id=>document.getElementById(id);
+let ROWS=[];
+function dow(d){const [y,m,dd]=d.split('-').map(Number);return (new Date(Date.UTC(y,m-1,dd)).getUTCDay()+6)%7;}
+function hr(h){return String(h).padStart(2,'0')+':00';}
+function load(){
+  const key=$('key').value.trim(); if(!key)return;
+  $('err').textContent='Cargando…';
+  fetch(`${URL_}?action=report&key=${encodeURIComponent(key)}`).then(r=>r.json()).then(d=>{
+    if(!d.ok){$('err').textContent=d.error==='clave incorrecta'?'Clave incorrecta':'No se pudo leer: '+(d.error||'');return;}
+    try{localStorage.setItem('statsKey',key);}catch(e){}
+    ROWS=d.rows;$('login').style.display='none';$('app').style.display='block';$('err').textContent='';render();
+  }).catch(()=>{$('err').textContent='Error de conexión. Probá de nuevo.';});
+}
+function bars(el,lel,vals,labels,fmt){const fm=fmt;
+  const max=Math.max(1,...vals),top=vals.indexOf(Math.max(...vals));
+  $(el).innerHTML=vals.map((v,i)=>`<div class="bar${v>0&&i===top?' top':''}" style="height:${Math.max(2,v/max*100)}%" title="${labels[i]}: ${v}"></div>`).join('');
+  $(lel).innerHTML=labels.map((l,i)=>`<span>${fmt?fmt(l,i):l}</span>`).join('');
+}
+function listOf(el,map){
+  const e=Object.entries(map).sort((a,b)=>b[1]-a[1]);const t=e.reduce((s,x)=>s+x[1],0)||1;
+  $(el).innerHTML=e.length?e.map(([k,v])=>`<div><span>${k}</span><b>${v} (${Math.round(v/t*100)}%)</b></div>`).join(''):'<div><span>Sin datos todavía</span></div>';
+}
+function render(){
+  const type=$('type').value,range=Number($('range').value);
+  let cut='';if(range){const d=new Date(Date.now()-3*3600e3-(range-1)*864e5);cut=d.toISOString().slice(0,10);}
+  const rows=ROWS.filter(r=>(type==='all'||r[2]===type)&&(!cut||r[0]>=cut));
+  const clics=ROWS.filter(r=>r[2]==='clic'&&(!cut||r[0]>=cut)).length;
+  const vis=ROWS.filter(r=>r[2]==='visita'&&(!cut||r[0]>=cut)).length;
+  const H=Array(24).fill(0),D=Array(7).fill(0),M=DOW.map(()=>Array(24).fill(0)),dates={},btn={},line={};
+  rows.forEach(r=>{const w=dow(r[0]);H[r[1]]++;D[w]++;M[w][r[1]]++;dates[r[0]]=(dates[r[0]]||0)+1;
+    if(r[2]==='clic'){btn[r[3]||'—']=(btn[r[3]||'—']||0)+1;line['Línea '+r[4]]=(line['Línea '+r[4]]||0)+1;}});
+  const bh=H.indexOf(Math.max(...H)),bd=D.indexOf(Math.max(...D));
+  $('kpis').innerHTML=[['Clics',clics],['Visitas',vis],['Clics por visita',vis?(clics/vis).toFixed(1):'—'],
+    ['Mejor día',rows.length?DOW[bd]:'—'],['Mejor franja',rows.length?hr(bh)+' a '+hr((bh+1)%24):'—']]
+    .map(k=>`<div class="kpi"><b>${k[1]}</b><span>${k[0]}</span></div>`).join('');
+  const combos=[];M.forEach((a,i)=>a.forEach((v,j)=>{if(v>0)combos.push([i,j,v]);}));combos.sort((a,b)=>b[2]-a[2]);
+  $('best').innerHTML=combos.slice(0,5).map((c,i)=>`<div><span>${i+1}. ${DOW[c[0]]} ${hr(c[1])}–${hr((c[1]+1)%24)}</span><b>${c[2]}</b></div>`).join('')||'<div><span>Sin datos todavía</span></div>';
+  bars('byHour','byHourL',H,[...Array(24).keys()],l=>l%3===0?l:'');
+  bars('byDow','byDowL',D,DOW,l=>l.slice(0,3));
+  const keys=Object.keys(dates).sort();
+  bars('byDate','byDateL',keys.map(k=>dates[k]),keys,(l,i)=>(i%Math.ceil(keys.length/6)===0)?l.slice(8)+'/'+l.slice(5,7):'');
+  const mx=Math.max(1,...M.flat());let hm='<div class="h"></div>'+[...Array(24).keys()].map(h=>`<div class="h">${h%3===0?h:''}</div>`).join('');
+  M.forEach((a,i)=>{hm+=`<div class="h">${DOW[i].slice(0,3)}</div>`+a.map((v,j)=>`<div title="${DOW[i]} ${hr(j)}: ${v}" style="background:rgba(${v?'192,77,255':'255,255,255'},${v?(0.15+0.85*v/mx).toFixed(2):0.04})"></div>`).join('');});
+  $('hm').innerHTML=hm;
+  listOf('byBtn',btn);listOf('byLine',line);
+}
+$('go').onclick=load;$('reload').onclick=load;$('type').onchange=render;$('range').onchange=render;
+$('key').addEventListener('keydown',e=>{if(e.key==='Enter')load();});
+try{const k=localStorage.getItem('statsKey');if(k){$('key').value=k;load();}}catch(e){}
+</script>
+</body>
+</html>
