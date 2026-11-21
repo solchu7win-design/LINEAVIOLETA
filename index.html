@@ -401,6 +401,54 @@
 .logo-wrap .logo-img{max-width:100%;filter:drop-shadow(0 0 18px rgba(192,77,255,0.35));}
 .logo-wrap .orbit{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible;}
 @media (prefers-reduced-motion:reduce){.orbit animateMotion,.orbit animate{display:none}}
+
+/* ===== Versión llamativa ===== */
+.hero-chips{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:6px 16px 0;position:relative;z-index:2}
+.chip{font-family:'Unbounded',sans-serif;font-weight:700;font-size:10.5px;letter-spacing:.4px;color:#fff;padding:8px 12px;border-radius:999px;
+  background:rgba(20,8,40,.75);border:1px solid rgba(192,77,255,.7);box-shadow:0 0 14px rgba(192,77,255,.45),inset 0 0 8px rgba(255,31,208,.18);white-space:nowrap}
+.chip .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#22ff88;box-shadow:0 0 10px #22ff88;margin-right:7px;animation:blink 1.1s ease-in-out infinite}
+.cta-section{padding-top:26px !important}
+.cta-kicker{font-family:'Anton','Unbounded',sans-serif;font-size:40px;line-height:1;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;
+  background:linear-gradient(90deg,#ff1fd0,#c04dff,#ff1fd0);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 14px rgba(255,31,208,.55));animation:kickerFlow 3s linear infinite}
+@keyframes kickerFlow{to{background-position:200% 0}}
+.cta-title{font-size:15px !important;margin-bottom:6px !important}
+.cta-point{font-size:26px;margin-bottom:12px;animation:pointBounce 1s ease-in-out infinite}
+@keyframes pointBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
+.buttons{gap:20px !important}
+.wa-button{padding:26px 18px !important;border-radius:20px !important;animation:floatBtn 5s ease-in-out infinite,glowPulse 1.8s ease-in-out infinite !important}
+.wa-button:nth-child(2){animation-delay:-1.6s,-.6s !important}.wa-button:nth-child(3){animation-delay:-3.2s,-1.2s !important}
+@keyframes glowPulse{0%,100%{filter:drop-shadow(0 0 6px rgba(192,77,255,.55))}50%{filter:drop-shadow(0 0 22px rgba(255,31,208,.95))}}
+.btn-title{font-size:23px !important}
+.btn-sub{font-size:12px !important}
+.btn-pill{flex-shrink:0;font-family:'Unbounded',sans-serif;font-weight:800;font-size:12px;letter-spacing:.5px;color:#fff;padding:11px 14px;border-radius:999px;
+  background:linear-gradient(135deg,#9b2fe8,#ff1fd0);box-shadow:0 6px 16px rgba(255,31,208,.55);animation:pillBeat 1.2s ease-in-out infinite}
+@keyframes pillBeat{0%,100%{transform:scale(1)}50%{transform:scale(1.09)}}
+.wa-button::after{animation-duration:2.4s !important}
+
+/* ===== Promo 20% ===== */
+.promo{position:relative;margin:20px 16px 0;padding:18px 14px 16px;text-align:center;border-radius:22px;overflow:hidden;
+  background:radial-gradient(120% 140% at 50% 0%,rgba(255,31,208,.42),rgba(90,23,168,.35) 55%,rgba(10,4,24,.9));
+  border:2px solid transparent;background-clip:padding-box;
+  box-shadow:0 0 0 2px #ff1fd0,0 0 30px rgba(255,31,208,.7),0 0 70px rgba(155,47,232,.55),inset 0 0 30px rgba(255,31,208,.25);
+  animation:promoPulse 1.8s ease-in-out infinite;z-index:2}
+@keyframes promoPulse{0%,100%{transform:scale(1);box-shadow:0 0 0 2px #ff1fd0,0 0 24px rgba(255,31,208,.6),0 0 50px rgba(155,47,232,.45),inset 0 0 24px rgba(255,31,208,.2)}
+  50%{transform:scale(1.025);box-shadow:0 0 0 2px #ff7ae8,0 0 44px rgba(255,31,208,.95),0 0 90px rgba(155,47,232,.75),inset 0 0 38px rgba(255,31,208,.35)}}
+.promo::before{content:'';position:absolute;top:0;left:-130%;width:45%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);
+  transform:skewX(-20deg);animation:btnShine 3s ease-in-out infinite}
+.promo-top{font-family:'Unbounded',sans-serif;font-weight:800;font-size:13px;letter-spacing:1.5px;color:#fff;text-shadow:0 0 10px #ff1fd0}
+.promo-main{display:flex;align-items:center;justify-content:center;gap:12px;line-height:1;margin:6px 0 4px}
+.promo-num{font-family:'Anton','Unbounded',sans-serif;font-size:96px;color:#fff;letter-spacing:1px;
+  text-shadow:0 0 10px #ff1fd0,0 0 26px #ff1fd0,0 0 54px #c04dff,0 4px 0 #6a12b8}
+.promo-num small{font-size:56px;margin-left:2px}
+.promo-extra{font-family:'Anton','Unbounded',sans-serif;font-size:44px;letter-spacing:2px;color:#0a0a0a;padding:6px 14px 4px;border-radius:12px;transform:rotate(-4deg);
+  background:linear-gradient(135deg,#ffffff,#ffd6f6);box-shadow:0 0 18px rgba(255,255,255,.7),0 6px 16px rgba(0,0,0,.5)}
+.promo-sub{font-family:'Unbounded',sans-serif;font-weight:700;font-size:15px;letter-spacing:.8px;color:#fff;text-shadow:0 0 12px rgba(255,31,208,.9)}
+.promo-sub b{color:#ffd6f6;text-decoration:underline;text-decoration-color:#ff1fd0;text-underline-offset:4px}
+.spark{position:absolute;color:#fff;text-shadow:0 0 10px #ff1fd0,0 0 20px #ff1fd0;animation:twinkle 1.6s ease-in-out infinite}
+.s1{top:10px;left:14px;font-size:16px}.s2{top:16px;right:18px;font-size:22px;animation-delay:-.5s}.s3{bottom:14px;left:22px;font-size:20px;animation-delay:-1s}.s4{bottom:12px;right:16px;font-size:15px;animation-delay:-1.3s}
+@keyframes twinkle{0%,100%{opacity:.25;transform:scale(.7) rotate(0)}50%{opacity:1;transform:scale(1.25) rotate(45deg)}}
+@media (max-width:360px){.promo-num{font-size:78px}.promo-extra{font-size:36px}}
 </style>
 </head>
 <body>
@@ -575,8 +623,24 @@
 </g></svg></div>
   </div>
 
+  <div class="hero-chips">
+    <span class="chip live"><i class="dot"></i>EN LÍNEA 24 HS</span>
+    <span class="chip">⚡ PAGOS EN EL ACTO</span>
+    <span class="chip">💸 SIN MÍNIMOS</span>
+    <span class="chip">♾️ RETIROS ILIMITADOS</span>
+  </div>
+
+  <div class="promo">
+    <span class="spark s1">✦</span><span class="spark s2">✦</span><span class="spark s3">✦</span><span class="spark s4">✦</span>
+    <div class="promo-top">🎁 BONO DE REGALO</div>
+    <div class="promo-main"><span class="promo-num">20<small>%</small></span><span class="promo-extra">EXTRA</span></div>
+    <div class="promo-sub">EN <b>TODAS</b> TUS CARGAS</div>
+  </div>
+
   <div class="cta-section">
-    <div class="cta-title">Elegí tu plataforma y <span class="accent">PEDÍ TU USUARIO</span></div>
+    <div class="cta-kicker">¿LISTO PARA JUGAR?</div>
+    <div class="cta-title">Tocá tu plataforma y <span class="accent">PEDÍ TU USUARIO</span></div>
+    <div class="cta-point">👇</div>
 
     <div class="buttons">
       <a id="btn-ganamos" class="wa-button glow-red" href="#" target="_blank" rel="noopener">
@@ -587,9 +651,9 @@
         </span>
         <span class="btn-text">
           <div class="btn-title">GANAMOS</div>
-          <div class="btn-sub"><span class="live-dot"></span>Respuesta inmediata</div>
+          <div class="btn-sub"><span class="live-dot"></span>Te respondemos al instante</div>
         </span>
-        <span class="btn-arrow">›</span>
+        <span class="btn-pill">PEDIR</span>
       </a>
 
       <a id="btn-bet30" class="wa-button glow-silver" href="#" target="_blank" rel="noopener">
@@ -600,9 +664,9 @@
         </span>
         <span class="btn-text">
           <div class="btn-title">BET30 HOST</div>
-          <div class="btn-sub"><span class="live-dot"></span>Respuesta inmediata</div>
+          <div class="btn-sub"><span class="live-dot"></span>Te respondemos al instante</div>
         </span>
-        <span class="btn-arrow">›</span>
+        <span class="btn-pill">PEDIR</span>
       </a>
 
       <a id="btn-betvip" class="wa-button glow-red" href="#" target="_blank" rel="noopener">
@@ -613,9 +677,9 @@
         </span>
         <span class="btn-text">
           <div class="btn-title">BET VIP</div>
-          <div class="btn-sub"><span class="live-dot"></span>Respuesta inmediata</div>
+          <div class="btn-sub"><span class="live-dot"></span>Te respondemos al instante</div>
         </span>
-        <span class="btn-arrow">›</span>
+        <span class="btn-pill">PEDIR</span>
       </a>
     </div>
   </div>
@@ -627,24 +691,6 @@
         <span class="badge-stroke-layer"><span class="w">ATENCIÓN </span><span class="w">24 HS</span></span>
         <span class="badge-fill-layer"><span class="w">ATENCIÓN </span><span class="w">24 HS</span></span>
       </span>
-    </div>
-    <div class="footer-features">
-      <div class="footer-feature">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#c04dff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Sin mínimos de carga
-      </div>
-      <div class="footer-feature">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#c9ccd1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Sin mínimos de retiro
-      </div>
-      <div class="footer-feature">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#c04dff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Pagos en el acto
-      </div>
-      <div class="footer-feature">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#c9ccd1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Retiros ilimitados
-      </div>
     </div>
   </div>
 
@@ -661,12 +707,10 @@
 
   // Mismo orden que en Code_linea_corta.gs (LINES)
   const lines = [
-    "5491125448190",
+    "5491125447506",
     "5491125448420",
     "5491165903202",
-    "5491156584255",
-    "5491125604292",
-    "5491160135425"
+    "5491125448190"
   ];
 
   // Nombre de cada plataforma (se inserta en las variantes de mensaje)
